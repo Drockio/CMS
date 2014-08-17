@@ -1,0 +1,10 @@
+﻿@model CMS.Models.CMSPage
+
+@{
+    ViewBag.Title = @Model.Name;
+}
+
+<h2>@Model.Name</h2>
+
+@Html.Raw(@Model.Content)
+

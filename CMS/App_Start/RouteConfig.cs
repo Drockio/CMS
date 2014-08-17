@@ -29,14 +29,14 @@ namespace CMS
 
             routes.MapRoute(
                 name: "Router",
-                url: "{tierOne}/{tierTwo}/{tierThree}",
+                url: "{pageName}/{param1}/{param2}",
                 defaults: new
                 {
                     controller = "Home",
                     action = "Router",
-                    tierOne = "Index",
-                    tierTwo = UrlParameter.Optional,
-                    tierThree = UrlParameter.Optional
+                    pageName = "Index",
+                    param1 = UrlParameter.Optional,
+                    param2 = UrlParameter.Optional
                 }
             );
 
