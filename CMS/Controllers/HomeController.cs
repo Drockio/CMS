@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CMS.Models;
 
 namespace CMS.Controllers
 {
@@ -44,6 +45,11 @@ namespace CMS.Controllers
             return "<p>A whole bunch of conent for: " + pageName + "</p>";
         }
 
+        public ActionResult NoJoy()
+        {
+            return View();
+        }
+
 
         /// <summary>
         /// Method determines whether "pageName" is a "real" view and controller entry, or a virtual page.
@@ -66,14 +72,15 @@ namespace CMS.Controllers
             //views and controller entry do not exist for this view, try to find it's content in the DB
             else
             {
-                var cmsPage = new Models.CMSPage();
-                cmsPage.Name = pageName;
-                cmsPage.Param1 = param1;
-                cmsPage.Param2 = param2;
-                cmsPage.Content = GetPageContent(pageName);
                 //this is a page that is included in our CMS (page viewable via the DB)
-                //in this function we will query the DB and get the content for the page.  We will route it through a default view.
-                return View("CMSPage", cmsPage);
+                CMSPage cmsPage = new CMSPage();
+                cmsPage = cmsPage.GetPage(pageName);
+                if (cmsPage != null)
+                {
+                    return View("CMSPage", cmsPage);
+                }
+                else
+                    return View("NoJoy");
             }
         }
     }

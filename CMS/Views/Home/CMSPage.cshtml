@@ -1,10 +1,10 @@
-﻿@model CMS.Models.CMSPage
+﻿@model CMS.Models.CMSPage 
 
 @{
-    ViewBag.Title = @Model.Name;
+    ViewBag.Title = @Model.Title;
 }
 
-<h2>@Model.Name</h2>
+<h2>@Model.Title</h2>
 
-@Html.Raw(@Model.Content)
+@Html.Raw(@Model.PageContent)
 
