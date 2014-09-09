@@ -16,7 +16,7 @@ namespace CMS.Controllers
             return View();
         }
 
-        public ActionResult AboutUs()
+        public ActionResult About()
         {
             return View();
         }
@@ -26,23 +26,27 @@ namespace CMS.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Contact(string param1, string param2)
         {
             ViewBag.Message = "Your contact page.";
 
             return View();
         }
 
-        private ViewEngineResult ReturnView(string name)
+        public ActionResult Test()
         {
-            return ViewEngines.Engines.FindView(ControllerContext, name, null);
-            
+            ViewBag.test = DAL.TestConnection();
+
+            return View();
         }
 
-        public string GetPageContent(string pageName)
+        private ViewEngineResult ReturnView(string name)
         {
-            //TODO:  Get this from the DB
-            return "<p>A whole bunch of conent for: " + pageName + "</p>";
+            if (!string.IsNullOrEmpty(name))
+                return ViewEngines.Engines.FindView(ControllerContext, name, null);
+            else
+                return null;
+            
         }
 
         public ActionResult NoJoy()
@@ -50,6 +54,17 @@ namespace CMS.Controllers
             return View();
         }
 
+
+        private string GetFirstSegment(string fullString, char delimiter)
+        {
+            if (!string.IsNullOrEmpty(fullString))
+            {
+                var temp = fullString.Split(delimiter);
+                    var retval = temp[0];
+                    return retval;
+            }
+            else return null;
+        }
 
         /// <summary>
         /// Method determines whether "pageName" is a "real" view and controller entry, or a virtual page.
@@ -60,21 +75,19 @@ namespace CMS.Controllers
         /// <param name="param1"></param>
         /// <param name="param2"></param>
         /// <returns></returns>
-        public ActionResult Router(string pageName, string param1 = null, string param2 = null)
+        public ActionResult Router(string url)
         {
-            var selectedView = ReturnView(pageName);
-
-            //views and controller entry exist for this view, call it!
-            if (selectedView.View != null)
+            if (string.IsNullOrEmpty(url))
             {
-                return View(selectedView.View);
+                return RedirectToAction("Index");
             }
-            //views and controller entry do not exist for this view, try to find it's content in the DB
             else
             {
+                var firstSegment = GetFirstSegment(url, '/');
+
                 //this is a page that is included in our CMS (page viewable via the DB)
                 CMSPage cmsPage = new CMSPage();
-                cmsPage = cmsPage.GetPage(pageName);
+                cmsPage = cmsPage.GetPage(firstSegment);
                 if (cmsPage != null)
                 {
                     return View("CMSPage", cmsPage);
