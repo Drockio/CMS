@@ -9,7 +9,7 @@ namespace CMS.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index()   
         {
             //RouteConfig will send us to the declared action if 
 
